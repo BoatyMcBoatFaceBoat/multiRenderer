@@ -1,11 +1,12 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
+
 const fs = require('fs');
 
 let devMode = true;
 const windows = new Set();
 
 const createWindow = function() {
-  let newTopWindow = new BrowserWindow({ 
+  let newTopWindow = new BrowserWindow({
     width: '500px',
     height: '500px',
     show: false ,
@@ -25,10 +26,10 @@ const createWindow = function() {
   });
 
   newTopWindow.on('closed', () => {
-    windows.delete(newTopWindow);       
+    windows.delete(newTopWindow);
   });
 
-  windows.add(newTopWindow);            
+  windows.add(newTopWindow);
   return newTopWindow;
 };
 
@@ -69,6 +70,3 @@ ipcMain.on('render-message', (event, arg) => {
   chosenElem.changeName(arg)
   event.reply('main-message', chosenElem.getName);
 })
-
-
-

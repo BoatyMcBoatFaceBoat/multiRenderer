@@ -1,43 +1,19 @@
 const { ipcRenderer } = require('electron');
+const util = require('../utils/util');
 
-const $ = function (name) {
-  return document.getElementById(name);
-}
+let renderer1 = util.$('renderer1');
+const menuButton1 = util.$(`renderer1Button`);
+let renderBuild = new util.HtmlBuilder(renderer1);
+renderBuild.createPChild('p0', 'this is render 1 ');
+renderBuild.createPChild('p1', 'this is render 1 ');
 
-function HtmlBuilder(el) {
-  this.currentElement = el;
-  this.createChild = function (newElement, idName) {
-    let htmlChild = document.createElement(newElement);
-    htmlChild.setAttribute('id', idName);
-    this.currentElement.appendChild(htmlChild);
-  }
-  this.createButtonChild = function (idName, buttonText) {
-    let buttonChild = document.createElement('button');
-    buttonChild.innerHTML = buttonText;
-    buttonChild.setAttribute('id', idName);
-    this.currentElement.appendChild(buttonChild);
-  }
-  this.createPChild = function(idName, pText) {
-    let pChild = document.createElement('p');
-    pChild.setAttribute('id', idName);
-    pChild.innerHTML = pText
-    this.currentElement.appendChild(pChild);
-  }
-}
-
-let renderer2 = $('renderer2');
-let renderBuild = new HtmlBuilder(renderer2);
-renderBuild.createPChild('p0', 'this is render 2 ');
-renderBuild.createPChild('p2', 'this is render 2 ');
-
-let menuButton2 = $(`renderer2Button`);
 
 ipcRenderer.on('main-message', (event, arg) => {
-  $('p2').innerHTML = 'active element set in the main: ' + JSON.stringify(arg);
+  util.$('p1').innerHTML = 'active element set in the main: ' + JSON.stringify(arg);
 })
 
-menuButton2.addEventListener('click', () => {
-    ipcRenderer.send('render-message', 'this comes from render 2');
-  }
-);
 
+menuButton1.addEventListener('click', () => {
+  ipcRenderer.send('render-message', 'this comes from render 1');
+}
+);

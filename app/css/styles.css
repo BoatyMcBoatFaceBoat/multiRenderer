@@ -1,0 +1,62 @@
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+h1 {
+  padding: 0;
+}
+
+button, div {
+  padding: 10px;
+}
+
+#menu, #content {
+  display: flex;
+}
+
+#menu {
+  height: 60px;
+}
+
+#content {
+  height: calc(100% - 60px);
+  background: grey;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+#content > div {
+  background: white;
+  border: 2px solid #333;
+}
+
+/* #newDiv {
+  background: pink;
+  border: 5px solid black;
+  min-width: 40px;
+  min-height: 40px;
+} */
+
+
+
+div.show {
+  display: block;
+  flex-grow: 1;
+}
+div.noshow {
+  display: none;
+}
+
+button.show {
+  display: block;
+}
+
+button.noshow {
+  display: none;
+}
+

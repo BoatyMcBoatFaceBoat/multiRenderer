@@ -1,1 +1,43 @@
-node_modules/
+.DS_Store
+node_modules
+dist
+doc
+in
+tmp
+transfer
+try
+arch
+.precomp
+out
+*.xlsx
+*.odf
+*.ods
+*.err
+*.zip
+*.log
+*.shm
+*.annshm*
+*.xhtml
+*.diag
+*.canon
+*.consist
+*.index
+*.dataform
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

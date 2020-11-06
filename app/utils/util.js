@@ -18,9 +18,14 @@ function HtmlBuilder(el) {
     this.currentElement.appendChild(pChild);
   }
 }
-
+function createPChild(from, pText) {
+  let pChild = document.createElement('p');
+  pChild.innerHTML = pText
+  from.appendChild(pChild);
+  return pChild;
+}
 function $(name) {
   return document.getElementById(name);
 }
 
-module.exports = { HtmlBuilder, $};
+module.exports = { HtmlBuilder, createPChild, $};

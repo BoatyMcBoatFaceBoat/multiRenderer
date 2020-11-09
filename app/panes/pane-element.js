@@ -62,5 +62,8 @@ class PaneElement extends HTMLElement {
 };
 
 // Define the new element
-module.exports = customElements.define('pane-element', Panelement,
+customElements.define('pane-element', PaneElement,
   { extends: 'div'});
+// module.exports = document.registerElement('atom-pane', {
+//     prototype: PaneElement.prototype
+//   });

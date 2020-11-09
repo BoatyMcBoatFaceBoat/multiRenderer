@@ -31,7 +31,7 @@ button, div {
 }
 
 #content > div {
-  background: white;
+  /* background: white; */
   border: 2px solid #333;
 }
 
@@ -42,7 +42,21 @@ button, div {
   min-height: 40px;
 } */
 
+div {
+  background: inherit;
+  border: 2px solid red;
+}
 
+.hor {
+  display: flex;
+  flex-direction: row;
+  background: green;
+}
+.ver {
+  display: flex;
+  flex-direction: column;
+  background: yellow;
+}
 
 div.show {
   display: block;
@@ -59,4 +73,3 @@ button.show {
 button.noshow {
   display: none;
 }
-

@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, Menu } = require('electron');
+// const { eventEmitter} = require('events');
 // const Pane = require('./panes/pane');
 // const misery = require('./panes/pane-axis');
 
@@ -14,8 +15,11 @@ const menuTemplate = [
     label: 'View',
     submenu: [
       { label: 'render &1',
-        click: () => { console.log(`trying to show 1`) }
-        // click: () => { showView(1) }
+        click: () => {
+          console.log('trying to generate event');
+          const window = BrowserWindow.getFocusedWindow();
+          window.webContents.send('open-renderer1', 'string sent');
+        }
       },
       { label: 'render &2',
         click: () => { console.log(`trying to show 2`) }
@@ -128,17 +132,20 @@ app.on('ready', () => createWindow());
 
 // })
 
-// function showView(nr) {
-//   if (typeof views[nr] === 'undefined') {
-//     const mod = './renderers/renderer' + nr;
-//     views[nr] = (function() {
-//       console.log(`trying to create an instance of ${mod}`);
-//       const dom = require(mod);
-//       console.log(`creating an instance of ${mod}`);
-//       return dom;
-//     })();
-//   }
-// }
+function showView(nr) {
+  if (typeof views[nr] === 'undefined') {
+    const mod = './renderers/renderer' + nr;
+    views[nr] = (function() {
+      console.log(`trying to create an instance of ${mod}`);
+      const dom = require(mod);
+      console.log(`creating an instance of ${mod}`);
+      return dom;
+    })();
+  }
+}
+
+
+
 ipcMain.on('render-message', (event, arg) => {
   chosenElem.changeName(arg)
   event.reply('main-message', chosenElem.getName);

@@ -1,5 +1,5 @@
 const PaneAxis = require('./pane-axis');
-const PaneElement = require('./pane-element');
+require('./pane-element');
 
 let nextInstanceId = 1;
 
@@ -9,7 +9,8 @@ module.exports = class Pane {
   }
   getElement() {
     if (!this.element) {
-      this.element = new PaneElement();
+      // console.log(paneElement);
+      this.element = document.createElement('pane-element');
     }
     return this.element;
   }

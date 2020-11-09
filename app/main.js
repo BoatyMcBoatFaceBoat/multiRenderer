@@ -16,7 +16,6 @@ const menuTemplate = [
     submenu: [
       { label: 'render &1',
         click: () => {
-          console.log('trying to generate event');
           const window = BrowserWindow.getFocusedWindow();
           window.webContents.send('open-renderer1', 'string sent');
         }

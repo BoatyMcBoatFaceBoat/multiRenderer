@@ -1,19 +1,19 @@
 const { ipcRenderer } = require('electron');
 const util = require('../utils/util');
 
-let renderer1 = util.$('renderer1');
-const menuButton1 = util.$(`renderer1Button`);
-let renderBuild = new util.HtmlBuilder(renderer1);
-renderBuild.createPChild('p0', 'this is render 1 ');
-renderBuild.createPChild('p1', 'this is render 1 ');
+let renderer2 = util.$('renderer2');
+const menuButton2 = util.$(`renderer2Button`);
+let renderBuild = new util.HtmlBuilder(renderer2);
+renderBuild.createPChild('p0', 'this is render 2 ');
+renderBuild.createPChild('p2', 'this is render 2 ');
 
 
 ipcRenderer.on('main-message', (event, arg) => {
-  util.$('p1').innerHTML = 'active element set in the main: ' + JSON.stringify(arg);
+  util.$('p2').innerHTML = 'active element set in the main: ' + JSON.stringify(arg);
 })
 
 
-menuButton1.addEventListener('click', () => {
-  ipcRenderer.send('render-message', 'this comes from render 1');
+menuButton2.addEventListener('click', () => {
+  ipcRenderer.send('render-message', 'this comes from render 2');
 }
 );

@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,       initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="stylesheet" href="./css/styles.css" type="text/css">
+    <title> App builder </title>
+  </head>
+  <template id="dotty">
+    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <ellipse (mousemove)="setCursor($event)" class="balloon" cx="10" cy="10" rx="10" ry="10"
+        style="fill:yellow;stroke:purple;stroke-width:2"></ellipse>
+      <circle class="cursor"
+        r="10" style="fill:red;stroke:black;stroke-width:2">
+      </circle>
+    </svg>
+  </template>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,       initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-  <link rel="stylesheet" href="./css/styles.css" type="text/css">
-  <title> App builder </title>
-</head>
+  <body>
+    <div id="content">
+      <p>nothing really</p>
+    </div>
+    <script>
+      const dotty = document.getElementById('dotty');
+      const dots = document.getElementsByClassName('dot');
+      function stencil() {
+        for(let i = 0; i < dots.length; i++) {
+          const cln = dotty.content.cloneNode(true);
+          dots[i].appendChild(cln)
+        }
+      }
+    </script>
 
-<body>
-  <div id="menu">
-    <h1>menu</h1>
-  </div>
-  <div id="content">
-    <div id="renderer1"></div>
-    <div id="renderer2"></div>
-    <div id="renderer3" class="show"></div>
-  </div>
-
-  <script>
-    require('./utils/util');
-    require('./renderers/window-menu');
-    require('./renderers/renderer1.js');
-    require('./renderers/renderer2.js');
-    require('./renderers/renderer3.js');
-    
-
-  </script>
-  <!-- <script type="module" src="utils/util.js"></script> -->
-</body>
-
-
+  </body>
 </html>

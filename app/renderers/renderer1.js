@@ -1,11 +1,12 @@
 const { ipcRenderer } = require('electron');
 const util = require('../utils/util');
-const paneful = require('../utils/pane-container');
+const paneful = require('../utils/pane');
 
 const at = util.$('content');
 // const menuButton1 = util.$(`renderer1Button`);
 // let renderBuild = new util.HtmlBuilder(renderer1);
-const renderBuild = document.createElement('pane-container');
+// const renderBuild = null;
+const renderBuild = document.createElement('pane');
 at.appendChild(renderBuild);
 util.createPChild(renderBuild, 'this is render 1 ');
 const p1 = util.createPChild(renderBuild, 'laziness of Irene');

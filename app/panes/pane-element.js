@@ -1,4 +1,3 @@
-// Create a class for the element
 class PaneElement extends HTMLElement {
   constructor() {
     // Always call super first in constructor

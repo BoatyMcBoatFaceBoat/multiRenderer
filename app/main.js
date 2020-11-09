@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain, Menu } = require('electron');
-const Pane = require('./panes/pane');
+// const Pane = require('./panes/pane');
+// const misery = require('./panes/pane-axis');
 
 const fs = require('fs');
 
@@ -76,7 +77,7 @@ const createWindow = function() {
   });
 
   newTopWindow.loadFile(`${__dirname}/index.html`);
-  let mainpane = new Pane;
+  // let mainpane = new Pane;
 
   if (devMode) {
     newTopWindow.openDevTools();

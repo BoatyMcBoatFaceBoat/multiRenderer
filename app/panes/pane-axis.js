@@ -1,5 +1,5 @@
 const Model = require('./model');
-const PaneAxisElement = require('./pane-axis-element');
+require('./pane-axis-element');
 class PaneAxis extends Model {
   constructor({ orientation, children, flexScale }) {
     // Always call super first in constructor
@@ -11,10 +11,11 @@ class PaneAxis extends Model {
 
     this.children = [];
   }
-  
+
   getElement() {
     if (!this.element) {
-      this.element = new PaneAxisElement().initialize(this, this.viewRegistry);
+      this.element = document.createElement('pane-axis-element');
+      // this.element = new PaneAxisElement().initialize(this, this.viewRegistry);
     }
     return this.element;
   }

@@ -70,4 +70,103 @@ module.exports = class Pane {
       this.setFlexScale(this.getFlexScale() / 1.1);
     }
   }
+  /*
+  Section: Splitting
+  */
+
+  // Public: Create a new pane to the left of this pane.
+  //
+  // * `params` (optional) {Object} with the following keys:
+  //   * `items` (optional) {Array} of items to add to the new pane.
+  //   * `copyActiveItem` (optional) {Boolean} true will copy the active item into the new split pane
+  //
+  // Returns the new {Pane}.
+  splitLeft(params) {
+    return this.split('horizontal', 'before', params);
+  }
+
+  // Public: Create a new pane to the right of this pane.
+  //
+  // * `params` (optional) {Object} with the following keys:
+  //   * `items` (optional) {Array} of items to add to the new pane.
+  //   * `copyActiveItem` (optional) {Boolean} true will copy the active item into the new split pane
+  //
+  // Returns the new {Pane}.
+  splitRight(params) {
+    return this.split('horizontal', 'after', params);
+  }
+
+  // Public: Creates a new pane above the receiver.
+  //
+  // * `params` (optional) {Object} with the following keys:
+  //   * `items` (optional) {Array} of items to add to the new pane.
+  //   * `copyActiveItem` (optional) {Boolean} true will copy the active item into the new split pane
+  //
+  // Returns the new {Pane}.
+  splitUp(params) {
+    return this.split('vertical', 'before', params);
+  }
+
+  // Public: Creates a new pane below the receiver.
+  //
+  // * `params` (optional) {Object} with the following keys:
+  //   * `items` (optional) {Array} of items to add to the new pane.
+  //   * `copyActiveItem` (optional) {Boolean} true will copy the active item into the new split pane
+  //
+  // Returns the new {Pane}.
+  splitDown(params) {
+    return this.split('vertical', 'after', params);
+  }
+
+  split(orientation, side, params) {
+    if (params && params.copyActiveItem) {
+      if (!params.items) params.items = [];
+      params.items.push(this.copyActiveItem());
+    }
+
+    if (this.parent.orientation !== orientation) {
+      this.parent.replaceChild(
+        this,
+        new PaneAxis(
+          {
+            container: this.container,
+            orientation,
+            children: [this],
+            flexScale: this.flexScale
+          },
+          this.viewRegistry
+        )
+      );
+      this.setFlexScale(1);
+    }
+
+    const newPane = new Pane(
+      Object.assign(
+        {
+          applicationDelegate: this.applicationDelegate,
+          notificationManager: this.notificationManager,
+          deserializerManager: this.deserializerManager,
+          config: this.config,
+          viewRegistry: this.viewRegistry
+        },
+        params
+      )
+    );
+
+    switch (side) {
+      case 'before':
+        this.parent.insertChildBefore(this, newPane);
+        break;
+      case 'after':
+        this.parent.insertChildAfter(this, newPane);
+        break;
+    }
+
+    if (params && params.moveActiveItem && this.activeItem)
+      this.moveItemToPane(this.activeItem, newPane);
+
+    newPane.activate();
+    return newPane;
+  }
+
 };

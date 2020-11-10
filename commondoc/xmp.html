@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,       initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-    <link rel="stylesheet" href="./css/styles.css" type="text/css">
-    <title> App builder </title>
+    <link rel="stylesheet" href="./styles.css" type="text/css">
+    <title>example</title>
   </head>
   <template id="dotty">
     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -17,19 +17,25 @@
     </svg>
   </template>
 
-  <body>
+  <body onload="stencil()">
     <div id="content">
+      <div class="hor">
+        <div class="ver">
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        <div class="dot"></div>
+      </div>
     </div>
     <script>
-      // const dotty = document.getElementById('dotty');
-      // const dots = document.getElementsByClassName('dot');
-      // function stencil() {
-      //   for(let i = 0; i < dots.length; i++) {
-      //     const cln = dotty.content.cloneNode(true);
-      //     dots[i].appendChild(cln)
-      //   }
-      // }
-      require('./renderers/renderer1')
+      const dotty = document.getElementById('dotty');
+      const dots = document.getElementsByClassName('dot');
+      function stencil() {
+        for(let i = 0; i < dots.length; i++) {
+          const cln = dotty.content.cloneNode(true);
+          dots[i].appendChild(cln)
+        }
+      }
     </script>
 
   </body>

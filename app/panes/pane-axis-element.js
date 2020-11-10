@@ -50,5 +50,5 @@ class PaneAxisElement extends HTMLElement {
 };
 
 // Define the new element
-module.exports = customElements.define('pane-axis-element', PaneAxisElement,
+customElements.define('pane-axis-element', PaneAxisElement,
   { extends: 'div'});

@@ -13,6 +13,21 @@ function do1() {
   const at = util.$('content');
   const renderBuild = new Pane();
   const elt = renderBuild.getElement();
+  elt.setAttribute('style', 'background: blue;');
+  elt.addEventListener('keyup', event => {
+    if (event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
+      switch (event.charCode) {
+        case 'l': console.log('left'); break;
+        case 'r': console.log('right'); break;
+        case 'u': console.log('up'); break;
+        case 'd': console.log('down'); break;
+        default:  console.log(event.key + ', ' + event.code);
+      }
+    } else {
+      console.log('not ctrl: ' + event.key + ', ' + event.code);
+    }
+
+  });
   // console.log(elt);
   util.createPChild(elt, 'this is text in render1');
   at.appendChild(elt);

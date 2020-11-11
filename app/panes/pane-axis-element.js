@@ -7,7 +7,7 @@ class PaneAxisElement extends HTMLElement {
     // Create a shadow root
     this.shadow = this.attachShadow({mode: 'open'});
     const wrapper = document.createElement('div');
-    wrapper.setAttribute('class', 'wrapper');
+    wrapper.setAttribute('class', 'vertical');
 
     const style = document.createElement('style');
     console.log(style.isConnected);

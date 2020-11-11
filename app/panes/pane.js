@@ -1,16 +1,33 @@
+const { ipcRenderer } = require('electron');
+
 const PaneAxis = require('./pane-axis');
 require('./pane-element');
 
 let nextInstanceId = 1;
+let rootPane = null;
 
-module.exports = class Pane {
+
+class Pane {
+  static focus = null;
   constructor(params = {}) {
     this.id = nextInstanceId++;
+    this.setParent(params.parent);
+    if (!rootPane) {
+      rootPane = this;
+    }
+    focus = this;
   }
   getElement() {
     if (!this.element) {
       // console.log(paneElement);
       this.element = document.createElement('pane-element');
+      this.element.addEventListener('click', event => {
+        if (event.ctrlKey) {
+          this.splitDown()
+        } else {
+          this.splitRight()
+        }
+      });
     }
     return this.element;
   }
@@ -73,100 +90,68 @@ module.exports = class Pane {
   /*
   Section: Splitting
   */
-
-  // Public: Create a new pane to the left of this pane.
-  //
-  // * `params` (optional) {Object} with the following keys:
-  //   * `items` (optional) {Array} of items to add to the new pane.
-  //   * `copyActiveItem` (optional) {Boolean} true will copy the active item into the new split pane
-  //
-  // Returns the new {Pane}.
   splitLeft(params) {
     return this.split('horizontal', 'before', params);
   }
-
-  // Public: Create a new pane to the right of this pane.
-  //
-  // * `params` (optional) {Object} with the following keys:
-  //   * `items` (optional) {Array} of items to add to the new pane.
-  //   * `copyActiveItem` (optional) {Boolean} true will copy the active item into the new split pane
-  //
-  // Returns the new {Pane}.
   splitRight(params) {
     return this.split('horizontal', 'after', params);
   }
-
-  // Public: Creates a new pane above the receiver.
-  //
-  // * `params` (optional) {Object} with the following keys:
-  //   * `items` (optional) {Array} of items to add to the new pane.
-  //   * `copyActiveItem` (optional) {Boolean} true will copy the active item into the new split pane
-  //
-  // Returns the new {Pane}.
   splitUp(params) {
     return this.split('vertical', 'before', params);
   }
-
-  // Public: Creates a new pane below the receiver.
-  //
-  // * `params` (optional) {Object} with the following keys:
-  //   * `items` (optional) {Array} of items to add to the new pane.
-  //   * `copyActiveItem` (optional) {Boolean} true will copy the active item into the new split pane
-  //
-  // Returns the new {Pane}.
   splitDown(params) {
     return this.split('vertical', 'after', params);
   }
 
+  // we insert a pane-axis unless there is one and the split is similarly oriented as the present axis
+  // if we do, we move the current pane into it.
   split(orientation, side, params) {
-    if (params && params.copyActiveItem) {
-      if (!params.items) params.items = [];
-      params.items.push(this.copyActiveItem());
+    const newPane = new Pane(params);
+    const p = document.createElement('p');
+    p.innerHTML = `newly created pane with id ${newPane.id}`;
+    newPane.getElement().appendChild(p);
+
+    if (typeof this.parent !== 'pane-axis' || this.parent.orientation !== orientation) {
+      const newAxis = new PaneAxis({orientation});
+      // make current pane daughter of this
+      const parent = this.parent;
+      let kids = parent.childNodes;
+      let kid;
+      while (kid = parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+        newAxis.getElement().appendChild(kid);
+      }
+      parent.appendChild(newAxis.getElement());
+      newAxis.getElement().appendChild(newPane.getElement());
+    } else if(typeof this.parent == 'pane-axis') {
+      newAxis.getElement().appendChild(newPane.getElement());
     }
-
-    if (this.parent.orientation !== orientation) {
-      this.parent.replaceChild(
-        this,
-        new PaneAxis(
-          {
-            container: this.container,
-            orientation,
-            children: [this],
-            flexScale: this.flexScale
-          },
-          this.viewRegistry
-        )
-      );
-      this.setFlexScale(1);
-    }
-
-    const newPane = new Pane(
-      Object.assign(
-        {
-          applicationDelegate: this.applicationDelegate,
-          notificationManager: this.notificationManager,
-          deserializerManager: this.deserializerManager,
-          config: this.config,
-          viewRegistry: this.viewRegistry
-        },
-        params
-      )
-    );
-
-    switch (side) {
-      case 'before':
-        this.parent.insertChildBefore(this, newPane);
-        break;
-      case 'after':
-        this.parent.insertChildAfter(this, newPane);
-        break;
-    }
-
-    if (params && params.moveActiveItem && this.activeItem)
-      this.moveItemToPane(this.activeItem, newPane);
-
-    newPane.activate();
+    // newPane.activate();
     return newPane;
   }
 
-};
+  static dumpTree() {
+    if (rootPane) {
+      rootPane.dump(0);
+    } else {
+      console.log('no rootPane identified');
+    }
+
+  }
+  dump(indent) {
+    const pref = ' '.repeat(indent);
+    console.log(pref + 'pane ' + this.id);
+    if (this.container) {
+      this.container.dump(indent + 1);
+    } else {
+      console.log(pref + ' *');
+    }
+  }
+}
+
+
+ipcRenderer.on('dump-concept-tree', (event, arg) => {
+  Pane.dumpTree();
+});
+
+module.exports = Pane

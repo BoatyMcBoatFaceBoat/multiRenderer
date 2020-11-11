@@ -1,11 +1,35 @@
 const { ipcRenderer } = require('electron');
 const util = require('../utils/util');
+const Pane = require('../panes/pane');
 
-let renderer3 = util.$('renderer3');
-let renderBuild = new util.HtmlBuilder(renderer3);
-renderBuild.createPChild('p0', 'this is render 3 ');
-
-renderBuild.createPChild('p3', 'Also laziness');
-ipcRenderer.on('main-message', (event, arg) => {
-  util.$('p3').innerHTML = 'active element set in the main: ' + JSON.stringify(arg);
-})
+ipcRenderer.on('open-renderer3', (event, arg) => {
+  const at = util.$('content');
+  const renderBuild = new Pane({parent: at});
+  const elt = renderBuild.getElement();
+  // elt.setAttribute('style', 'background: blue;');
+  // elt.addEventListener('keyup', event => {
+  //   console.log('event: ' + event);
+  //   elt.setAttribute('style', 'background: blue;');
+  //   if (event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
+  //     switch (event.charCode) {
+  //       case 'l': console.log('left'); break;
+  //       case 'r': console.log('right'); break;
+  //       case 'u': console.log('up'); break;
+  //       case 'd': console.log('down'); break;
+  //       default:  console.log(event.charCode + ': ' + event.key + ', ' + event.code);
+  //     }
+  //   } else {
+  //     console.log('not ctrl: ' + event.key + ', ' + event.code);
+  //   }
+  // });
+  elt.addEventListener('click', event => {
+    if (event.ctrlKey) {
+      renderBuild.splitDown()
+    } else {
+      renderBuild.splitRight()
+    }
+  });
+  // console.log(elt);
+  util.createPChild(elt, 'this is text in render3');
+  at.appendChild(elt);
+});

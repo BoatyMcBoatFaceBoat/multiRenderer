@@ -1,7 +1,5 @@
 const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 // const { eventEmitter} = require('events');
-// const Pane = require('./panes/pane');
-// const misery = require('./panes/pane-axis');
 
 const fs = require('fs');
 
@@ -21,12 +19,16 @@ const menuTemplate = [
         }
       },
       { label: 'render &2',
-        click: () => { console.log(`trying to show 2`) }
-        // click: () => { showView(2) }
+        click: () => {
+          const window = BrowserWindow.getFocusedWindow();
+          window.webContents.send('open-renderer2', 'string sent');
+        }
       },
       { label: 'render &3',
-        click: () => { console.log(`trying to show 3`) }
-        // click: () => { showView(3) }
+        click: () => {
+          const window = BrowserWindow.getFocusedWindow();
+          window.webContents.send('open-renderer3', 'string sent');
+        }
       },
       { role: 'toggledevtools' },
       { type: 'separator' },
@@ -51,6 +53,17 @@ const menuTemplate = [
       ] : [
         { role: 'close' }
       ])
+    ]
+  },
+  {
+    label: 'Tools',
+    submenu: [
+      { label: 'dumptree', 
+        click: () => {
+          const window = BrowserWindow.getFocusedWindow();
+          window.webContents.send('dump-concept-tree', 'doei');
+        }
+      }
     ]
   },
   {
